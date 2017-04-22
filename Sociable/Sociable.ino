@@ -27,7 +27,7 @@ void setup() {
 }
 
 void loop() {
-  delay(100);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+  delay(500);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
   unsigned int uS1 = sonar_one.ping(); // Send ping, get ping time in microseconds (uS).
   unsigned int uS2 = sonar_two.ping();
   Serial.print("Ping 1: ");
@@ -36,12 +36,13 @@ void loop() {
   Serial.print("Ping 2: ");
   Serial.print(double(uS2) / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
   Serial.print("cm ");
-  Serial.println(String(millis()));
-  
+  Serial.print(String(millis()/ 1000.0));
+  Serial.print(" ");
+  Serial.println(String(lastRecordedTime));
   isPhoneThere1 = isPhone(double(uS1) / US_ROUNDTRIP_CM);
   isPhoneThere2 = isPhone(double(uS2) / US_ROUNDTRIP_CM); 
-    if (millis() - lastRecordedTime >= 1000){
-      lastRecordedTime += 1000;
+    if (millis() / 1000.0 - lastRecordedTime >= 1){
+      lastRecordedTime += 1;
       if (!isPhoneThere1)
         timer1 = timer1 - 1;
       if (!isPhoneThere2)
