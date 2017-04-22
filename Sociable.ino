@@ -28,13 +28,13 @@ void loop() {
   delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
   unsigned int uS1 = sonar_one.ping(); // Send ping, get ping time in microseconds (uS).
   unsigned int uS2 = sonar_two.ping();
-  Serial.print("Ping 1: ");
-  Serial.print(uS1 / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-  Serial.print("cm  ");
-  Serial.print("Ping 2: ");
-  Serial.print(uS2 / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-  Serial.println("cm");
   if (DEBUG){
-    lcd.print(uS1 / US_ROUNDTRIP_CM + "    " + uS2 / US_ROUNDTRIP_CM);
+  	Serial.print("Ping 1: ");
+  	Serial.print(uS1 / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+  	Serial.print("cm  ");
+  	Serial.print("Ping 2: ");
+  	Serial.print(uS2 / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
+  	Serial.println("cm");
+    	lcd.print(uS1 / US_ROUNDTRIP_CM + "    " + uS2 / US_ROUNDTRIP_CM);
   }
 }
