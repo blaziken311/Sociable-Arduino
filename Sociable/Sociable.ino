@@ -12,8 +12,7 @@ boolean isPhoneThere1;
 boolean isPhoneThere2;
 int timer1 = TIME_SEC;
 int timer2 = TIME_SEC;
-int lastRecordedTime1 = 0;
-int lastRecordedTime2 = 0;
+int lastRecordedTime = 0;
 
 NewPing sonar_one(TRIGGER_PIN_ONE, ECHO_PIN_ONE, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 NewPing sonar_two(TRIGGER_PIN_TWO, ECHO_PIN_TWO, MAX_DISTANCE);
@@ -28,7 +27,7 @@ void setup() {
 }
 
 void loop() {
-  delay(50);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+  delay(100);                      // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
   unsigned int uS1 = sonar_one.ping(); // Send ping, get ping time in microseconds (uS).
   unsigned int uS2 = sonar_two.ping();
   Serial.print("Ping 1: ");
@@ -36,21 +35,24 @@ void loop() {
   Serial.print("cm  ");
   Serial.print("Ping 2: ");
   Serial.print(double(uS2) / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-  Serial.println("cm");
+  Serial.print("cm ");
+  Serial.println(String(millis()));
+  
   isPhoneThere1 = isPhone(double(uS1) / US_ROUNDTRIP_CM);
   isPhoneThere2 = isPhone(double(uS2) / US_ROUNDTRIP_CM); 
-  if (!isPhoneThere1){
-    
-  }
-
-  
-  if (DEBUG){
+    if (millis() - lastRecordedTime >= 1000){
+      lastRecordedTime += 1000;
+      if (!isPhoneThere1)
+        timer1 = timer1 - 1;
+      if (!isPhoneThere2)
+        timer2 = timer2 - 1;
+    }
     lcd.setCursor(0,1);
-  }
+    lcd.print(String(timer1) + "          " + String(timer2));
 }
 
 boolean isPhone(double distance){
-  if (distance < 3.0 && !0.0){
+  if (distance < 5.0 && !0.0){
     return true;
   }
     return false;
