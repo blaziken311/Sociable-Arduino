@@ -9,7 +9,7 @@
 #define LED_PIN_TWO      7
 #define MAX_DISTANCE     100 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 #define DEBUG            true
-#define TIME_SEC         300
+#define TIME_SEC         60
 
 String shameMessage = "SHAME!";
 boolean isPhoneThere1;
