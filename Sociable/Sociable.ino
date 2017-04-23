@@ -11,7 +11,7 @@
 #define DEBUG            true
 #define TIME_SEC         10
 
-String shameMessage = "RIPP!";
+String shameMessage = "SHAME!";
 boolean isPhoneThere1;
 boolean isPhoneThere2;
 int timer1 = TIME_SEC; int timer2 = TIME_SEC; //set times
