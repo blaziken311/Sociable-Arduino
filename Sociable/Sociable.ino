@@ -23,7 +23,9 @@ void setup() {
   lcd.begin(16, 2);
   // Print a message to the LCD.
   lcd.print("Left       Right");
+  //Set pinmodes
   pinMode(7, OUTPUT);
+  pinMode(6, OUTPUT);
 }
 
 void loop() {
@@ -49,13 +51,26 @@ void loop() {
       timer2 = timer2 - 1;
   }
   lcd.setCursor(0, 1);
-  if ( !(timer1 <= 0 && timer2 <= 0) ) {
-    if( timer1 <= 0 ) timer1 = 0;
-    if( timer2 <= 0 ) timer2 = 0;
-    lcd.print(String(timer1) + spaces(10 + (3 - String(timer1).length() + (3 - String(timer2).length()))) + String(timer2));
+  if ( timer1 > 0 || timer2 > 0 ) {
+    if ( timer1 <= 0 && timer2 > 0 ) {
+      lcd.print("SHAME!" + spaces(10 + (3 - 6) + (3 - String(timer2).length())) + String(timer2));
+      digitalWrite(6, HIGH);
+      digitalWrite(7, LOW);
+    }
+    else if ( timer2 <= 0 && timer1 > 0) {
+      lcd.print(String(timer1) + spaces(10 + (3 - String(timer1).length() + (3 - 6))) + "SHAME!");
+      digitalWrite(7, HIGH);
+      digitalWrite(6, LOW);
+    }
+    else {
+      lcd.print(String(timer1) + spaces(10 + (3 - String(timer1).length()) + (3 - String(timer2).length())) + String(timer2));
+      digitalWrite(6, LOW);
+      digitalWrite(7, LOW);
+    }
   }
   else {
-    lcd.print( spaces(4) + "TIME UP!" + spaces(4));
+    lcd.print( spaces(5) + "SHAME!" + spaces(5));
+    digitalWrite(6, HIGH);
     digitalWrite(7, HIGH);
   }
 }
