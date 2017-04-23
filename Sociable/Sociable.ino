@@ -8,7 +8,7 @@
 #define LED_PIN_ONE      6
 #define LED_PIN_TWO      7
 #define MAX_DISTANCE     100 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
-#define DEBUG            true
+#define DEBUG            false
 #define TIME_SEC         10
 
 String shameMessage = "SHAME!";
@@ -22,7 +22,8 @@ NewPing sonar_two(TRIGGER_PIN_TWO, ECHO_PIN_TWO, MAX_DISTANCE);
 LiquidCrystal lcd(9, 8, 5, 4, 3, 2);
 
 void setup() {
-  Serial.begin(115200); // Open serial monitor at 115200 baud to see ping results.
+  if ( DEBUG )
+    Serial.begin(115200); // Open serial monitor at 115200 baud to see ping results.
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
   // Print a message to the LCD.
@@ -36,8 +37,8 @@ void loop() {
   delay(100);                          // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
   unsigned int uS1 = sonar_one.ping(); // Send ping, get ping time in microseconds (uS).
   unsigned int uS2 = sonar_two.ping();
-  
-  if( DEBUG ) {
+
+  if ( DEBUG ) {
     Serial.print("Ping 1: ");
     Serial.print(double(uS1) / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
     Serial.print("cm  ");
@@ -48,7 +49,7 @@ void loop() {
     Serial.print(" ");
     Serial.println(String(lastRecordedTime));
   }
-  
+
   isPhoneThere1 = isPhone(double(uS1) / US_ROUNDTRIP_CM);
   isPhoneThere2 = isPhone(double(uS2) / US_ROUNDTRIP_CM);
   if (millis() / 1000.0 - lastRecordedTime >= 1) {
@@ -58,7 +59,7 @@ void loop() {
     if (!isPhoneThere2)
       timer2 = timer2 - 1;
   }
-  
+
   lcd.setCursor(0, 1);
   if ( timer1 > 0 || timer2 > 0 ) {
     if ( timer1 <= 0 && timer2 > 0 ) {
@@ -78,17 +79,17 @@ void loop() {
     }
   }
   else {
-    if( shameMessage.length() % 2 == 0 )
-      lcd.print( spaces((16-shameMessage.length())/2) + shameMessage + spaces((16-shameMessage.length())/2));
+    if ( shameMessage.length() % 2 == 0 )
+      lcd.print( spaces((16 - shameMessage.length()) / 2) + shameMessage + spaces((16 - shameMessage.length()) / 2));
     else
-      lcd.print( spaces((16-shameMessage.length())/2) + shameMessage + spaces((16-shameMessage.length())/2 + 1));
+      lcd.print( spaces((16 - shameMessage.length()) / 2) + shameMessage + spaces((16 - shameMessage.length()) / 2 + 1));
     digitalWrite(LED_PIN_ONE, HIGH);
     digitalWrite(LED_PIN_TWO, HIGH);
   }
 }
 
 boolean isPhone(double distance) {
-  if (distance < 5.0) {
+  if (distance < 10) {
     return true;
   }
   return false;
