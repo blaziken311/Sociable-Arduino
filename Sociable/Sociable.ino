@@ -8,8 +8,8 @@
 #define LED_PIN_ONE      6
 #define LED_PIN_TWO      7
 #define MAX_DISTANCE     100 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
-#define DEBUG            false
-#define TIME_SEC         10
+#define DEBUG            true
+#define TIME_SEC         300
 
 String shameMessage = "SHAME!";
 boolean isPhoneThere1;
@@ -29,8 +29,8 @@ void setup() {
   // Print a message to the LCD.
   lcd.print("Left" + spaces(7) + "Right");
   //Set pinmodes
-  pinMode(7, OUTPUT);
-  pinMode(6, OUTPUT);
+  pinMode(LED_PIN_TWO, OUTPUT);
+  pinMode(LED_PIN_ONE, OUTPUT);
 }
 
 void loop() {
@@ -44,10 +44,8 @@ void loop() {
     Serial.print("cm  ");
     Serial.print("Ping 2: ");
     Serial.print(double(uS2) / US_ROUNDTRIP_CM); // Convert ping time to distance in cm and print result (0 = outside set distance range)
-    Serial.print("cm ");
-    Serial.print(String(millis() / 1000.0));
-    Serial.print(" ");
-    Serial.println(String(lastRecordedTime));
+    Serial.println("cm ");
+
   }
 
   isPhoneThere1 = isPhone(double(uS1) / US_ROUNDTRIP_CM);
@@ -89,7 +87,7 @@ void loop() {
 }
 
 boolean isPhone(double distance) {
-  if (distance < 10) {
+  if (distance < 5) {
     return true;
   }
   return false;
